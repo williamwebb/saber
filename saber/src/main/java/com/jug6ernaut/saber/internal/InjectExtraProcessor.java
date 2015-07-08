@@ -25,7 +25,6 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -72,7 +71,7 @@ public final class InjectExtraProcessor extends AbstractProcessor {
   }
 
   @Override public Set<String> getSupportedAnnotationTypes() {
-    Set<String> supportTypes = new LinkedHashSet<String>();
+    Set<String> supportTypes = new LinkedHashSet<>();
     supportTypes.add(Preference.class.getCanonicalName());
     return supportTypes;
   }
@@ -165,6 +164,17 @@ public final class InjectExtraProcessor extends AbstractProcessor {
       hasError = true;
     }
 
+    // Verify if extra exists its valid for type
+    String defaultValue = element.getAnnotation(Preference.class).defaultValue();
+
+    if(!isNullOrEmpty(defaultValue))
+    if (!DefaultValueValidator.isValid(targetClassName, defaultValue)) {
+      error(enclosingElement, "@%s has an invalid defaultValue %s."
+              , annotationClass.getSimpleName()
+              , defaultValue);
+      hasError = true;
+    }
+
     return hasError;
   }
 
@@ -184,7 +194,7 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     String name = element.getSimpleName().toString();
     String file = element.getAnnotation(Preference.class).file();
     String key = element.getAnnotation(Preference.class).value();
-    String defaultValue = element.getAnnotation(com.jug6ernaut.saber.Preference.class).defaultValue();
+    String defaultValue = element.getAnnotation(Preference.class).defaultValue();
 
     TypeMirror type = element.asType();
 
@@ -195,47 +205,6 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     TypeMirror erasedTargetType = typeUtils.erasure(enclosingElement.asType());
     erasedTargetTypes.add(erasedTargetType);
   }
-
-  /**
-   * Returns {@code true} if the an annotation is found on the given element with the given class
-   * name (not fully qualified).
-   */
-  private static boolean hasAnnotationWithName(Element element, String simpleName) {
-    for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
-      String annotationName = mirror.getAnnotationType().asElement().getSimpleName().toString();
-      if (simpleName.equals(annotationName)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Returns {@code true} if an injection is deemed to be not required. This happens if it is
-   * annotated with any annotation named {@code Optional} or {@code Nullable}.
-   */
-//  private static boolean isRequiredInjection(Element element) {
-//    return !hasAnnotationWithName(element, "Nullable") && !hasAnnotationWithName(element,
-//        "Optional");
-//  }
-
-  /**
-   * Returns {@code true} if the an annotation is found on the given element with the given class
-   * name (must be a fully qualified class name).
-   */
-//  private static boolean hasAnnotationWithFQCN(Element element, String annotationClassNameName) {
-//    if (element != null) {
-//      for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-//        if (annotationMirror.getAnnotationType()
-//            .asElement()
-//            .toString()
-//            .equals(annotationClassNameName)) {
-//          return true;
-//        }
-//      }
-//    }
-//    return false;
-//  }
 
   private ExtraInjector getOrCreateTargetClass(Map<TypeElement, ExtraInjector> targetClassMap,
       TypeElement enclosingElement) {

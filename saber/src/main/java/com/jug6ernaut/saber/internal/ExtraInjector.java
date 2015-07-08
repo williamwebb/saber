@@ -162,7 +162,7 @@ final class ExtraInjector {
         .append("\"").append(injection.getKey()).append("\", ")
         .append("").append(new Gson().toJson(injection.getDefaultValue())).append(", ")
         .append("").append(injection.getType()).append(".class").append("")
-            .append(");\n");
+        .append(");\n");
 
     List<Binding> requiredBindings = injection.getRequiredBindings();
     if (!requiredBindings.isEmpty()) {
