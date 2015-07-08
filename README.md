@@ -3,6 +3,25 @@ Saber
 
 Android SharedPreferences wrapper and injector. Based on Dart, which was originally based on ButterKnife.
 
+Download
+--------
+
+Download [the latest JAR][1] or grab via Maven:
+
+```xml
+<dependency>
+  <groupId>com.jug6ernaut</groupId>
+  <artifactId>saber</artifactId>
+  <version>0.5.0-SNAPSHOT</version>
+</dependency>
+```
+or Gradle:
+
+```groovy
+compile 'com.jug6eranut:saber:0.5.0-SNAPSHOT'
+```
+
+
 License
 -------
 
