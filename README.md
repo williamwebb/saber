@@ -31,7 +31,7 @@ Saber provides wrapper classes for all shared preference applicable value types,
 Download
 --------
 
-Download [the latest JAR][1] or grab via Maven:
+Download the latest JAR via Maven:
 
 ```xml
 <dependency>
@@ -66,6 +66,3 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
-
- [1]: http://jakewharton.github.io/butterknife/
- [2]: http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.f2prateek.dart&a=dart&v=LATEST
