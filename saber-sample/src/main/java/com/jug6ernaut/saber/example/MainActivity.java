@@ -20,7 +20,6 @@ package com.jug6ernaut.saber.example;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.jug6ernaut.saber.Preference;
 import com.jug6ernaut.saber.Saber;
@@ -28,24 +27,14 @@ import com.jug6ernaut.saber.preferences.IntPreference;
 
 public class MainActivity extends Activity {
 
-  @Preference(value="", defaultValue="", file="") IntPreference someIntPreference;
+  @Preference(value="", defaultValue="", file="") IntPreference intPref;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    setContentView(R.layout.activity_main);
-
-//    Preference object = Saber.Finder.getExtra(this, "", "ExtraString", "", StringPreference.class);
-
-    ButterKnife.inject(this);
     Saber.inject(this);
 
-    System.err.println(someIntPreference.get());
-    someIntPreference.set(1);
-    System.err.println(someIntPreference.get());
-    someIntPreference.set(2);
-    System.err.println(someIntPreference.get());
-    someIntPreference.set(10);
+    int value = intPref.get();
+    intPref.set(9999);
   }
 
   @OnClick(R.id.button) public void onLaunchButtonClick() {

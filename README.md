@@ -3,6 +3,31 @@ Saber
 
 Android SharedPreferences wrapper and injector. Based on Dart, which was originally based on ButterKnife.
 
+SharedPreference "injection" library for Android which uses annotation processing to generate code that does direct field assignment of your SharedPreference.
+
+Usage
+=====
+
+	// only value/key is required
+	@Preference(file="file", value="key", defaultValue="") IntPreference intPref;
+
+	@Override protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Saber.inject(this);
+
+		int value = intPref.get();
+		intPref.set(9999);
+	}
+
+Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
+
+	IntPreference
+	LongPreference
+	FloatPreference
+	BooleanPreference
+	StringPreference
+	StringSetPreference
+
 Download
 --------
 
