@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import com.jug6ernaut.saber.internal.InjectExtraProcessor;
-import com.jug6ernaut.saber.preferences.BooleanPreference;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -133,7 +132,7 @@ public class Saber {
     }
     try {
       Class<?> injector = Class.forName(clsName + InjectExtraProcessor.SUFFIX);
-      inject = injector.getMethod("inject", cls, cls);
+      inject = injector.getMethod("inject", Context.class, cls);
       if (debug) Log.d(TAG, "HIT: Class loaded injection class.");
     } catch (ClassNotFoundException e) {
       if (debug) Log.d(TAG, "Not found. Trying superclass " + cls.getSuperclass().getName());
@@ -157,28 +156,17 @@ public class Saber {
    * If any of the means to get a bundle are null, this will simply return a null.
    */
   public static class Finder {
-
-      public static <P extends com.jug6ernaut.saber.preferences.Preference> P getExtra(Context context, String file, String key, String defaultValue, Class<P> type) {
-        SharedPreferences prefs;
-        if(isNullOrEmpty(file)) prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        else prefs = context.getSharedPreferences(file,Context.MODE_PRIVATE);
-
-        try {
-          System.err.println(type.getSimpleName());
-          return type.getDeclaredConstructor(SharedPreferences.class,String.class).newInstance(prefs,key);
-//          if(isNullOrEmpty(defaultValue)) return type.getDeclaredConstructor()
-//          return (P) type.getDeclaredConstructors()[1].newInstance(prefs,key,defaultValue);
-        } catch (Exception e) {
-          e.printStackTrace();
-          return null;
-        }
-      }
-
-    private static BooleanPreference getPreference(Context context, String file, String key, Object defaultValue) {
+    public static <P extends com.jug6ernaut.saber.preferences.Preference> P getPreference(Context context, String file, String key, String defaultValue, Class<P> type) {
       SharedPreferences prefs;
       if(isNullOrEmpty(file)) prefs = PreferenceManager.getDefaultSharedPreferences(context);
       else prefs = context.getSharedPreferences(file,Context.MODE_PRIVATE);
-      return new BooleanPreference(prefs,key, (Boolean) defaultValue);
+
+      try {
+        return type.getDeclaredConstructor(SharedPreferences.class,String.class).newInstance(prefs,key);
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
     }
   }
 

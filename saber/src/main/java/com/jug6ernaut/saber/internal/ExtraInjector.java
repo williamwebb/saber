@@ -134,8 +134,8 @@ final class ExtraInjector {
   //Context context, String file, String key, Object defaultValue, Class<Preference> type
   private void emitInject(StringBuilder builder) {
     builder.append("  public static void inject(")
-        .append("final ").append(targetClass).append(" context, final ")
-            .append(targetClass)
+        .append("final Context context, final ")
+        .append(targetClass)
         .append(" target")
 
         .append(") {\n");
@@ -157,7 +157,7 @@ final class ExtraInjector {
   }
 
   private void emitExtraInjection(StringBuilder builder, ExtraInjection injection) {
-    builder.append("    object = Finder.getExtra(context, ")
+    builder.append("    object = Finder.getPreference(context, ")
         .append("\"").append(injection.getFile()).append("\", ")
         .append("\"").append(injection.getKey()).append("\", ")
         .append("").append(new Gson().toJson(injection.getDefaultValue())).append(", ")
