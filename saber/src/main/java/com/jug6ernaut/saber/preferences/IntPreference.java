@@ -2,13 +2,14 @@ package com.jug6ernaut.saber.preferences;
 
 import android.content.SharedPreferences;
 
+@SuppressWarnings("unused")
 public class IntPreference extends Preference<Integer> {
 
     public IntPreference(SharedPreferences preferences, String key) {
-        super(preferences, key, 0);
+        super(preferences, key);
     }
 
-    public IntPreference(SharedPreferences preferences, String key, Integer defaultValue) {
+    public IntPreference(SharedPreferences preferences, String key, String defaultValue) {
         super(preferences, key, defaultValue);
     }
 
@@ -24,5 +25,10 @@ public class IntPreference extends Preference<Integer> {
     @Override
     protected Integer defaultValue() {
         return 0;
+    }
+
+    @Override
+    protected Integer fromString(String value) {
+        return Integer.valueOf(value);
     }
 }

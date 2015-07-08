@@ -28,8 +28,7 @@ import com.jug6ernaut.saber.preferences.IntPreference;
 
 public class MainActivity extends Activity {
 
-  @Preference("blabla")
-  IntPreference someIntPreference;
+  @Preference(value="", defaultValue="", file="") IntPreference someIntPreference;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

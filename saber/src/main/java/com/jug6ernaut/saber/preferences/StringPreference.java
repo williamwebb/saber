@@ -2,11 +2,11 @@ package com.jug6ernaut.saber.preferences;
 
 import android.content.SharedPreferences;
 
+@SuppressWarnings("unused")
 public class StringPreference extends Preference<String> {
 
-
     public StringPreference(SharedPreferences preferences, String key) {
-        super(preferences,key);
+        super(preferences, key);
     }
 
     public StringPreference(SharedPreferences preferences, String key, String defaultValue) {
@@ -25,5 +25,10 @@ public class StringPreference extends Preference<String> {
     @Override
     protected String defaultValue() {
         return "";
+    }
+
+    @Override
+    protected String fromString(String value) {
+        return value;
     }
 }

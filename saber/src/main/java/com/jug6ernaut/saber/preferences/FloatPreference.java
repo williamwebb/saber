@@ -2,9 +2,14 @@ package com.jug6ernaut.saber.preferences;
 
 import android.content.SharedPreferences;
 
+@SuppressWarnings("unused")
 public class FloatPreference extends Preference<Float> {
 
-    public FloatPreference(SharedPreferences preferences, String key, Float defaultValue) {
+    public FloatPreference(SharedPreferences preferences, String key) {
+        super(preferences, key);
+    }
+
+    public FloatPreference(SharedPreferences preferences, String key, String defaultValue) {
         super(preferences, key, defaultValue);
     }
 
@@ -20,5 +25,10 @@ public class FloatPreference extends Preference<Float> {
     @Override
     protected Float defaultValue() {
         return 0F;
+    }
+
+    @Override
+    protected Float fromString(String value) {
+        return Float.valueOf(value);
     }
 }

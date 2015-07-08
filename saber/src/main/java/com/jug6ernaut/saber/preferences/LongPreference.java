@@ -2,9 +2,14 @@ package com.jug6ernaut.saber.preferences;
 
 import android.content.SharedPreferences;
 
+@SuppressWarnings("unused")
 public class LongPreference extends Preference<Long> {
 
-    public LongPreference(SharedPreferences preferences, String key, Long defaultValue) {
+    public LongPreference(SharedPreferences preferences, String key) {
+        super(preferences, key);
+    }
+
+    public LongPreference(SharedPreferences preferences, String key, String defaultValue) {
         super(preferences, key, defaultValue);
     }
 
@@ -20,5 +25,10 @@ public class LongPreference extends Preference<Long> {
     @Override
     protected Long defaultValue() {
         return 0L;
+    }
+
+    @Override
+    protected Long fromString(String value) {
+        return Long.valueOf(value);
     }
 }

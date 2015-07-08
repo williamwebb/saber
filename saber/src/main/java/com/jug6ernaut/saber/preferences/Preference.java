@@ -16,15 +16,16 @@ public abstract class Preference<Type> {
         this.defaultValue = defaultValue();
     }
 
-    public Preference(SharedPreferences preferences, String key, Type defaultValue) {
+    public Preference(SharedPreferences preferences, String key, String defaultValue) {
         this.preferences = preferences;
         this.key = key;
-        this.defaultValue = defaultValue;
+        this.defaultValue = fromString(defaultValue);
     }
 
     public abstract Type get();
     public abstract void set(Type type);
     protected abstract Type defaultValue();
+    protected abstract Type fromString(String value);
 
     public boolean isSet() {
         return preferences.contains(key);
