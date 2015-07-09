@@ -104,7 +104,7 @@ public class Saber {
     inject(target.getActivity(), target);
   }
 
-  static void inject(Context source, Object target) {
+  public static void inject(Context source, Object target) {
     Class<?> targetClass = target.getClass();
     try {
       if (debug) Log.d(TAG, "Looking up extra injector for " + targetClass.getName());
