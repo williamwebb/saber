@@ -59,8 +59,6 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     StringSetPreference.class.getName()
   );
 
-  private Map<String,String> classLevelFileNameMap = new HashMap<>();
-
   private Elements elementUtils;
   private Types typeUtils;
   private Filer filer;
@@ -191,8 +189,6 @@ public final class InjectExtraProcessor extends AbstractProcessor {
       String className = element.asType().toString();
 
       if(isNullOrEmpty(fileName)) error(element,"Class level requires a file name.");
-
-      classLevelFileNameMap.put(element.asType().toString(),fileName);
 
       for (ExtraInjector ei : targetClassMap.values()) {
         if(className.equals(ei.getClassName())) {
