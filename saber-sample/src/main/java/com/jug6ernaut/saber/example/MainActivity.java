@@ -18,11 +18,10 @@
 package com.jug6ernaut.saber.example;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import butterknife.OnClick;
 import com.jug6ernaut.saber.Preference;
 import com.jug6ernaut.saber.Saber;
+import com.jug6ernaut.saber.preferences.BooleanPreference;
 import com.jug6ernaut.saber.preferences.IntPreference;
 import com.jug6ernaut.saber.preferences.StringPreference;
 
@@ -31,6 +30,7 @@ public class MainActivity extends Activity {
 
   @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
   @Preference(value = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
+  @Preference BooleanPreference boolPreference; // no information needed
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -43,9 +43,4 @@ public class MainActivity extends Activity {
     stringPreference.set("whatwhat");
   }
 
-  @OnClick(R.id.button) public void onLaunchButtonClick() {
-    Intent intent = SampleActivity.getLaunchIntent(this, "a string", 4, ComplexParcelable.random(),
-        new ExampleParcel("Andy"), "defaultKeyExtra");
-    startActivity(intent);
-  }
 }

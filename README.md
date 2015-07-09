@@ -7,21 +7,26 @@ SharedPreference "injection" library for Android which uses annotation processin
 
 Usage
 =====
+```
+@Preference(file = "aFile") // file name applied to all sub @Preference
+public class MainActivity extends Activity {
 
-    @Preference("someKey") IntPreference intPref; // all fields provided
-    @Preference StringPreference stringPreference; // variable name is used as key
+  @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
+  @Preference(value = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
+  @Preference BooleanPreference boolPreference; // no information needed
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Saber.inject(this);
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    Saber.inject(this);
 
-        int value = intPref.get();
-        intPref.set(9999);
+    int value = intPref.get();
+    intPref.set(9999);
 
-        String string = stringPreference.get();
-        stringPreference.set("whatwhat");
-    }
-
+    String string = stringPreference.get();
+    stringPreference.set("whatwhat");
+  }
+}
+```
 Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
 
 	IntPreference
