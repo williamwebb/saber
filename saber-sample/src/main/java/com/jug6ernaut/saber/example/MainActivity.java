@@ -26,7 +26,6 @@ import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.IntPreference;
 import com.jug6ernaut.saber.preferences.StringPreference;
 
-@Preference
 public class MainActivity extends Activity {
 
   @Preference("someKey") IntPreference intPref; // all fields provided
