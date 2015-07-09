@@ -25,12 +25,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.jug6ernaut.saber.internal.InjectExtraProcessor.isNullOrEmpty;
+
 final class ExtraInjector {
   private final Map<String, ExtraInjection> injectionMap = new LinkedHashMap<>();
   private final String classPackage;
   private final String className;
   private final String targetClass;
-  private String parentInjector;
+  private String fileName;
 
   ExtraInjector(String classPackage, String className, String targetClass) {
     this.classPackage = classPackage;
@@ -140,11 +142,6 @@ final class ExtraInjector {
 
         .append(") {\n");
 
-    // Emit a call to the superclass injector, if any.
-//    if (parentInjector != null) {
-//      builder.append("    ").append(parentInjector).append(".inject(finder, target, source);\n\n");
-//    }
-
     // Local variable in which all extras will be temporarily stored.
     builder.append("    Preference object;\n");
 
@@ -157,8 +154,18 @@ final class ExtraInjector {
   }
 
   private void emitExtraInjection(StringBuilder builder, ExtraInjection injection) {
+    // file name precedence annotation level, class level, classname
+    String file;
+    if(!isNullOrEmpty(injection.getFile())) {
+      file = injection.getFile();
+    } else if(!isNullOrEmpty(fileName)) {
+      file = fileName;
+    } else {
+      file = targetClass;
+    }
+
     builder.append("    object = Finder.getPreference(context, ")
-        .append("\"").append(injection.getFile()).append("\", ")
+        .append("\"").append(file).append("\", ")
         .append("\"").append(injection.getKey()).append("\", ")
         .append("").append(new Gson().toJson(injection.getDefaultValue())).append(", ")
         .append("").append(injection.getType()).append(".class").append("")
@@ -196,4 +203,17 @@ final class ExtraInjector {
       builder.append("object;\n");
     }
   }
+
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public String getClassName() {
+    return className;
+  }
+
 }

@@ -21,6 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
@@ -32,10 +33,8 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  * {@literal @}Preference("key") String title;
  * {@literal @}Preference String content; // "content" is the key for the extra
  * </code></pre>
- *
- * @see Nullable
  */
-@Retention(CLASS) @Target(FIELD) public @interface Preference {
+@Retention(CLASS) @Target({TYPE,FIELD}) public @interface Preference {
   String value() default "";
   String defaultValue() default "";
   String file() default "";

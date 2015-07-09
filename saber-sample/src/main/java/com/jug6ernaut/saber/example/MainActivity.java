@@ -26,10 +26,11 @@ import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.IntPreference;
 import com.jug6ernaut.saber.preferences.StringPreference;
 
+@Preference(file = "aFile") // file name applied to all sub @Preference
 public class MainActivity extends Activity {
 
-  @Preference("someKey") IntPreference intPref; // all fields provided
-  @Preference StringPreference stringPreference; // variable name is used as key
+  @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
+  @Preference(value = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

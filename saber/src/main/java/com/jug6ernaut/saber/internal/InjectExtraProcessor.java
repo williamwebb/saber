@@ -42,6 +42,7 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static javax.lang.model.element.ElementKind.CLASS;
+import static javax.lang.model.element.ElementKind.PACKAGE;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -57,6 +58,8 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     StringPreference.class.getName(),
     StringSetPreference.class.getName()
   );
+
+  private Map<String,String> classLevelFileNameMap = new HashMap<>();
 
   private Elements elementUtils;
   private Types typeUtils;
@@ -181,6 +184,25 @@ public final class InjectExtraProcessor extends AbstractProcessor {
   private void parseInjectExtra(Element element, Map<TypeElement, ExtraInjector> targetClassMap,
       Set<TypeMirror> erasedTargetTypes) {
     boolean hasError = false;
+
+
+    if (element.getEnclosingElement().getKind() == PACKAGE) {
+      String fileName = element.getAnnotation(Preference.class).file();
+      String className = element.asType().toString();
+
+      if(isNullOrEmpty(fileName)) error(element,"Class level requires a file name.");
+
+      classLevelFileNameMap.put(element.asType().toString(),fileName);
+
+      for (ExtraInjector ei : targetClassMap.values()) {
+        if(className.equals(ei.getClassName())) {
+          ei.setFileName(fileName);
+        }
+      }
+
+      return;
+    }
+
     TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
 
     // Verify common generated code restrictions.
@@ -197,6 +219,7 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     String defaultValue = element.getAnnotation(Preference.class).defaultValue();
 
     if(isNullOrEmpty(key)) key = name;
+    if(isNullOrEmpty(key)) file = enclosingElement.asType().toString();
 
     TypeMirror type = element.asType();
 
