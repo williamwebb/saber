@@ -196,6 +196,8 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     String key = element.getAnnotation(Preference.class).value();
     String defaultValue = element.getAnnotation(Preference.class).defaultValue();
 
+    if(isNullOrEmpty(key)) key = name;
+
     TypeMirror type = element.asType();
 
     ExtraInjector extraInjector = getOrCreateTargetClass(targetClassMap, enclosingElement);

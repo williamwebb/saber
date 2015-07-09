@@ -8,16 +8,19 @@ SharedPreference "injection" library for Android which uses annotation processin
 Usage
 =====
 
-	// only value/key is required
-	@Preference(file="file", value="key", defaultValue="") IntPreference intPref;
+    @Preference("someKey") IntPreference intPref; // all fields provided
+    @Preference StringPreference stringPreference; // variable name is used as key
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Saber.inject(this);
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Saber.inject(this);
 
-		int value = intPref.get();
-		intPref.set(9999);
-	}
+        int value = intPref.get();
+        intPref.set(9999);
+
+        String string = stringPreference.get();
+        stringPreference.set("whatwhat");
+    }
 
 Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
 
@@ -28,10 +31,22 @@ Saber provides wrapper classes for all shared preference applicable value types,
 	StringPreference
 	StringSetPreference
 
+Configuration
+-------------
+
+`@Preference` Has 3 fields, all optional
+
+`value`  Key to be used, if not provided variable name is used.
+
+`file` File to use, if not provided the default is used.
+
+`defaultValue` Default value to be used, if not provided the class specific value will be used.
+
 Download
 --------
 
 Download the latest JAR via Maven:
+
 
 ```xml
 <dependency>
@@ -40,7 +55,9 @@ Download the latest JAR via Maven:
   <version>0.5.0-SNAPSHOT</version>
 </dependency>
 ```
+
 or Gradle:
+
 
 ```groovy
 compile 'com.jug6eranut:saber:0.5.0-SNAPSHOT'

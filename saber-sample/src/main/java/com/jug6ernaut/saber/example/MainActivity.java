@@ -24,10 +24,13 @@ import butterknife.OnClick;
 import com.jug6ernaut.saber.Preference;
 import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.IntPreference;
+import com.jug6ernaut.saber.preferences.StringPreference;
 
+@Preference
 public class MainActivity extends Activity {
 
-  @Preference(value="", defaultValue="", file="") IntPreference intPref;
+  @Preference("someKey") IntPreference intPref; // all fields provided
+  @Preference StringPreference stringPreference; // variable name is used as key
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -35,6 +38,9 @@ public class MainActivity extends Activity {
 
     int value = intPref.get();
     intPref.set(9999);
+
+    String string = stringPreference.get();
+    stringPreference.set("whatwhat");
   }
 
   @OnClick(R.id.button) public void onLaunchButtonClick() {
