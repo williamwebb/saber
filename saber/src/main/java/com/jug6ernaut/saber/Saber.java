@@ -30,36 +30,6 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Extra injection utilities. Use this class to simplify getting extras.
- * <p>
- * Injecting extras from your activity is as easy as:
- * <pre><code>
- * public class ExampleActivity extends Activity {
- *   {@literal @}Preference("key") String extra;
- *
- *   {@literal @}Override protected void onCreate(Bundle savedInstanceState) {
- *     super.onCreate(savedInstanceState);
- *     Saber.inject(this);
- *   }
- * }
- * </code></pre>
- * You can inject an {@link #inject(Activity) activity directly}, {@link
- * #inject(android.app.Fragment) fragment directly}, or inject an
- * {@link #inject(Context, Object) bundle into another object}.
- * <p>
- * Be default, extras are required to be present in the bundle for field injections.
- * If an extra is optional add the {@link Nullable @Nullable} annotation.
- * <pre><code>
- * {@literal @}Nullable {@literal @}Preference("key") String extra;
- * </code></pre>
- * <p>
- * If you need to provide a default value for an extra, simply set an initial value
- * while declaring the field, combined with the {@link Nullable @Nullable} annotation.
- * <pre><code>
- * {@literal @}Nullable {@literal @}Preference("key") String extra = "default_value";
- * </code></pre>
- */
 public class Saber {
   static final Map<Class<?>, Method> INJECTORS = new LinkedHashMap<Class<?>, Method>();
   static final Method NO_OP = null;
@@ -162,7 +132,10 @@ public class Saber {
       else prefs = context.getSharedPreferences(file,Context.MODE_PRIVATE);
 
       try {
-        return type.getDeclaredConstructor(SharedPreferences.class,String.class).newInstance(prefs,key);
+        if(isNullOrEmpty(defaultValue))
+          return type.getDeclaredConstructor(SharedPreferences.class,String.class).newInstance(prefs,key);
+        else
+          return type.getDeclaredConstructor(SharedPreferences.class,String.class,String.class).newInstance(prefs,key,defaultValue);
       } catch (Exception e) {
         e.printStackTrace();
         return null;
@@ -185,4 +158,5 @@ public class Saber {
   public static boolean isNullOrEmpty(String str) {
     return str == null || str.trim().length() == 0;
   }
+
 }

@@ -11,8 +11,8 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class StringSetPreference extends Preference<Set<String>> {
 
-    Type typeToken = new TypeToken<HashSet<String>>(){}.getType();
-    private Gson gson = new Gson();
+    private static Type typeToken = new TypeToken<HashSet<String>>(){}.getType();
+    private static Gson gson = new Gson();
 
     public StringSetPreference(SharedPreferences preferences, String key) {
         super(preferences, key);

@@ -32,6 +32,7 @@ final class ExtraInjector {
   private final String classPackage;
   private final String className;
   private final String targetClass;
+  private String parentInjector;
   private String fileName;
 
   ExtraInjector(String classPackage, String className, String targetClass) {
@@ -142,6 +143,11 @@ final class ExtraInjector {
 
         .append(") {\n");
 
+    // Emit a call to the superclass injector, if any.
+//    if (parentInjector != null) {
+//      builder.append("    ").append(parentInjector).append(".inject(finder, target, source);\n\n");
+//    }
+
     // Local variable in which all extras will be temporarily stored.
     builder.append("    Preference object;\n");
 
@@ -154,14 +160,14 @@ final class ExtraInjector {
   }
 
   private void emitExtraInjection(StringBuilder builder, ExtraInjection injection) {
-    // file name precedence annotation level, class level, classname
+
     String file;
     if(!isNullOrEmpty(injection.getFile())) {
-      file = injection.getFile();
+      file = injection.getFile(); // annotation level
     } else if(!isNullOrEmpty(fileName)) {
-      file = fileName;
+      file = fileName; // class level
     } else {
-      file = targetClass;
+      file = targetClass; // fall back to targetClass
     }
 
     builder.append("    object = Finder.getPreference(context, ")

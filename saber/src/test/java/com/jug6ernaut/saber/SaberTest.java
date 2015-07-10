@@ -18,6 +18,8 @@
 package com.jug6ernaut.saber;
 
 import android.app.Activity;
+import com.google.testing.compile.JavaFileObjects;
+import com.jug6ernaut.saber.internal.InjectExtraProcessor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +27,12 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import javax.tools.JavaFileObject;
+
+import static com.google.testing.compile.JavaSourceSubjectFactory.javaSource;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.entry;
+import static org.truth0.Truth.ASSERT;
 
 @RunWith(RobolectricTestRunner.class) @Config(manifest = Config.NONE)
 public class SaberTest {
@@ -49,4 +55,15 @@ public class SaberTest {
     Saber.inject(new Activity(), new Object());
     assertThat(Saber.INJECTORS).isEmpty();
   }
+
+  @Test public void annotationProcessor() {
+    ASSERT.about(javaSource())
+        .that(source)
+        .processedWith(new InjectExtraProcessor())
+        .compilesWithoutError()
+        .and().generatesSources(generated);
+  }
+
+  private final JavaFileObject source = JavaFileObjects.forResource("com.jug6ernaut.saber.example/MainActivity.java");
+  private final JavaFileObject generated = JavaFileObjects.forResource("com.jug6ernaut.saber.example/MainActivity$$ExtraInjector.java");
 }
