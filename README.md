@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jug6ernaut/saber.svg?branch=master)](https://travis-ci.org/jug6ernaut/saber)
+
 Saber
 ============
 
