@@ -18,6 +18,7 @@
 package com.jug6ernaut.saber;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -59,6 +60,10 @@ public class Saber {
     inject(target, target);
   }
 
+  public static void inject(Application target) {
+    inject(target, target);
+  }
+
   /**
    * Inject fields annotated with {@link Preference} in the specified {@link
    * android.app.Fragment}.
@@ -71,10 +76,10 @@ public class Saber {
    * @see android.app.Fragment#getArguments()
    */
   public static void inject(Fragment target) {
-    inject(target.getActivity(), target);
+    inject(target, target.getActivity());
   }
 
-  public static void inject(Context source, Object target) {
+  public static void inject(Object target, Context source) {
     Class<?> targetClass = target.getClass();
     try {
       if (debug) Log.d(TAG, "Looking up extra injector for " + targetClass.getName());

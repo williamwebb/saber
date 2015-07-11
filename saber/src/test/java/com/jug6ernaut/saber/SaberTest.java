@@ -45,14 +45,14 @@ public class SaberTest {
     class Example {  }
 
     Example example = new Example();
-    Saber.inject(null, example);
+    Saber.inject(example,null);
     assertThat(Saber.INJECTORS).contains(entry(Example.class, Saber.NO_OP));
   }
 
   @Test public void injectingKnownPackagesIsNoOp() {
     Saber.inject(new Activity());
     assertThat(Saber.INJECTORS).isEmpty();
-    Saber.inject(new Activity(), new Object());
+    Saber.inject(new Object(),new Activity());
     assertThat(Saber.INJECTORS).isEmpty();
   }
 
