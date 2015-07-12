@@ -19,17 +19,19 @@ package com.jug6ernaut.saber.example;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.jug6ernaut.saber.OnChange;
 import com.jug6ernaut.saber.Preference;
+import com.jug6ernaut.saber.PreferenceConfig;
 import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.BooleanPreference;
 import com.jug6ernaut.saber.preferences.IntPreference;
 import com.jug6ernaut.saber.preferences.StringPreference;
 
-@Preference(file = "aFile") // file name applied to all sub @Preference
+@PreferenceConfig(file = "aFile") // file name applied to all sub @Preference
 public class MainActivity extends Activity {
 
   @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
-  @Preference(value = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
+  @Preference(key = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
   @Preference BooleanPreference boolPreference; // no information needed
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,30 @@ public class MainActivity extends Activity {
 
     String string = stringPreference.get();
     stringPreference.set("whatwhat");
+
+    Boolean bool = boolPreference.get();
+    boolPreference.set(true);
+
+    intPref.delete();
+    stringPreference.delete();
+    boolPreference.delete();
   }
 
+  @OnChange
+  void onChange(String key) {
+    System.err.println("onChange: " + key);
+  }
+
+  @OnChange(file = "someFile")
+  void onChange2(String key) {
+    System.err.println("onChange2: " + key);
+
+  }
+
+  @OnChange(file = "aFile")
+  void onChange3(String key) {
+    System.err.println("onChange3: " + key);
+
+
+  }
 }

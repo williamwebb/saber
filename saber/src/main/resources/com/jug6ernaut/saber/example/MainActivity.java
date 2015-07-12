@@ -18,18 +18,23 @@
 package com.jug6ernaut.saber.example;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import com.jug6ernaut.saber.OnChange;
 import com.jug6ernaut.saber.Preference;
+import com.jug6ernaut.saber.PreferenceConfig;
 import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.BooleanPreference;
 import com.jug6ernaut.saber.preferences.IntPreference;
 import com.jug6ernaut.saber.preferences.StringPreference;
 
-@Preference(file = "aFile") // file name applied to all sub @Preference
+@PreferenceConfig(file=MainActivity.FILE) // file name applied to all sub @Preference, this annotation is 100% optional
 public class MainActivity extends Activity {
 
+  public static final String FILE = "aFile";
+
   @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
-  @Preference(value = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
+  @Preference(key = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
   @Preference BooleanPreference boolPreference; // no information needed
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,26 @@ public class MainActivity extends Activity {
 
     String string = stringPreference.get();
     stringPreference.set("whatwhat");
+
+
+  }
+
+  @OnChange
+  void onChange(String value) {
+
+  }
+
+  public void blah() {
+//    getSharedPreferences("",1).registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+//      @Override
+//      public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+//        switch (key) {
+//          case "se":
+//            onChange(sp.getInt("se", 0));
+//            break;
+//        }
+//      }
+//    });
   }
 
 }

@@ -20,8 +20,7 @@ package com.jug6ernaut.saber;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
@@ -30,12 +29,10 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  * The extra will automatically be cast to the field type. If no key is provided, the variable name
  * will be used.
  * <pre><code>
- * {@literal @}Preference("key") String title;
- * {@literal @}Preference String content; // "content" is the key for the extra
+ * {@literal @}OnChange("key") StringPrference title;
+ * {@literal @}OnChange String content; // "content" is the key for the extra
  * </code></pre>
  */
-@Retention(CLASS) @Target({TYPE,FIELD}) public @interface Preference {
-  String key() default "";
-  String defaultValue() default "";
-  String file() default "";
+@Retention(CLASS) @Target(METHOD) public @interface OnChange {
+    String file() default "";
 }

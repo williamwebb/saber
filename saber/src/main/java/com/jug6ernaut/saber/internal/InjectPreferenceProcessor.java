@@ -17,8 +17,11 @@
 
 package com.jug6ernaut.saber.internal;
 
+import com.jug6ernaut.saber.OnChange;
 import com.jug6ernaut.saber.Preference;
+import com.jug6ernaut.saber.PreferenceConfig;
 import com.jug6ernaut.saber.preferences.*;
+import com.sun.tools.javac.code.Symbol;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -42,13 +45,12 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static javax.lang.model.element.ElementKind.CLASS;
-import static javax.lang.model.element.ElementKind.PACKAGE;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
-public final class InjectExtraProcessor extends AbstractProcessor {
-  public static final String SUFFIX = "$$ExtraInjector";
+public final class InjectPreferenceProcessor extends AbstractProcessor {
+  public static final String SUFFIX = "$$SaberInjector";
 
   List<String> CLASSES = Arrays.asList(
     BooleanPreference.class.getName(),
@@ -78,16 +80,16 @@ public final class InjectExtraProcessor extends AbstractProcessor {
   }
 
   @Override public boolean process(Set<? extends TypeElement> elements, RoundEnvironment env) {
-    Map<TypeElement, ExtraInjector> targetClassMap = findAndParseTargets(env);
+    Map<TypeElement, PreferenceInjector> targetClassMap = findAndParseTargets(env);
 
-    for (Map.Entry<TypeElement, ExtraInjector> entry : targetClassMap.entrySet()) {
+    for (Map.Entry<TypeElement, PreferenceInjector> entry : targetClassMap.entrySet()) {
       TypeElement typeElement = entry.getKey();
-      ExtraInjector extraInjector = entry.getValue();
+      PreferenceInjector preferenceInjector = entry.getValue();
 
       try {
-        JavaFileObject jfo = filer.createSourceFile(extraInjector.getFqcn(), typeElement);
+        JavaFileObject jfo = filer.createSourceFile(preferenceInjector.getFqcn(), typeElement);
         Writer writer = jfo.openWriter();
-        writer.write(extraInjector.brewJava());
+        writer.write(preferenceInjector.brewJava());
         writer.flush();
         writer.close();
       } catch (IOException e) {
@@ -98,14 +100,14 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     return true;
   }
 
-  private Map<TypeElement, ExtraInjector> findAndParseTargets(RoundEnvironment env) {
-    Map<TypeElement, ExtraInjector> targetClassMap = new LinkedHashMap<>();
+  private Map<TypeElement, PreferenceInjector> findAndParseTargets(RoundEnvironment env) {
+    Map<TypeElement, PreferenceInjector> targetClassMap = new LinkedHashMap<>();
     Set<TypeMirror> erasedTargetTypes = new LinkedHashSet<>();
 
     // Process each @Preference elements.
     for (Element element : env.getElementsAnnotatedWith(Preference.class)) {
       try {
-        parseInjectExtra(element, targetClassMap, erasedTargetTypes);
+        parsePreference(element, targetClassMap, erasedTargetTypes);
       } catch (Exception e) {
         StringWriter stackTrace = new StringWriter();
         e.printStackTrace(new PrintWriter(stackTrace));
@@ -115,8 +117,32 @@ public final class InjectExtraProcessor extends AbstractProcessor {
       }
     }
 
+    for (Element element : env.getElementsAnnotatedWith(PreferenceConfig.class)) {
+      try {
+        parsePreferenceConfig(element,targetClassMap);
+      } catch (Exception e) {
+        StringWriter stackTrace = new StringWriter();
+        e.printStackTrace(new PrintWriter(stackTrace));
+
+        error(element, "Unable to generate extra injector for @Preference.\n\n%s",
+                stackTrace.toString());
+      }
+    }
+
+    for (Element element : env.getElementsAnnotatedWith(OnChange.class)) {
+      try {
+        parseOnChange(element,targetClassMap);
+      } catch (Exception e) {
+        StringWriter stackTrace = new StringWriter();
+        e.printStackTrace(new PrintWriter(stackTrace));
+
+        error(element, "Unable to generate extra injector for @Preference.\n\n%s",
+                stackTrace.toString());
+      }
+    }
+
     // Try to find a parent injector for each injector.
-    for (Map.Entry<TypeElement, ExtraInjector> entry : targetClassMap.entrySet()) {
+    for (Map.Entry<TypeElement, PreferenceInjector> entry : targetClassMap.entrySet()) {
       String parentClassFqcn = findParentFqcn(entry.getKey(), erasedTargetTypes);
       if (parentClassFqcn != null) {
         entry.getValue().setParentInjector(parentClassFqcn + SUFFIX);
@@ -179,25 +205,66 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     return hasError;
   }
 
-  private void parseInjectExtra(Element element, Map<TypeElement, ExtraInjector> targetClassMap,
-      Set<TypeMirror> erasedTargetTypes) {
-    boolean hasError = false;
+  private void parseOnChange(Element element, Map<TypeElement, PreferenceInjector> targetClassMap) {
+    String fileName = element.getAnnotation(OnChange.class).file();
+    String targetName = element.getEnclosingElement().toString();
 
+    TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
 
-    if (element.getEnclosingElement().getKind() == PACKAGE) {
-      String fileName = element.getAnnotation(Preference.class).file();
-      String className = element.asType().toString();
+    // check the PreferenceInjector has more then 2 instances of OnChange
 
-      if(isNullOrEmpty(fileName)) error(element,"Class level requires a file name.");
+    Symbol.MethodSymbol ms = (Symbol.MethodSymbol) element;
+    // check method has 1 parameter
+    // check method's 1 parameter is string
 
-      for (ExtraInjector ei : targetClassMap.values()) {
-        if(className.equals(ei.getClassName())) {
-          ei.setFileName(fileName);
-        }
-      }
+    com.sun.tools.javac.util.List<Symbol.VarSymbol> params = ms.getParameters();
+    if(params.size() != 1){
 
-      return;
     }
+    if(params.get(0).asType().toString().equals("java.lang.String")) {
+
+    }
+
+    String methodName = ms.getSimpleName().toString();
+
+    if(isNullOrEmpty(fileName)) fileName = targetName;
+
+    boolean found = false;
+    for (PreferenceInjector ei : targetClassMap.values()) {
+      if(targetName.equals(ei.getTargetClass())) {
+        Map<String, String> map = ei.getOnChangeMap();
+        if(map.containsKey(fileName)) {
+          error(element,"Why are you trying to have multiple listeners for the same SharedPreference in the same File?");
+        }
+        map.put(fileName,methodName);
+        found = true;
+      }
+    }
+    if(!found) {
+      PreferenceInjector ei = getOrCreateTargetClass(targetClassMap,enclosingElement);
+      ei.getOnChangeMap().put(fileName,methodName);
+    }
+  }
+
+  private void parsePreferenceConfig(Element element, Map<TypeElement, PreferenceInjector> targetClassMap) {
+    String fileName = element.getAnnotation(PreferenceConfig.class).file();
+    String className = element.asType().toString();
+
+    if(isNullOrEmpty(fileName)) error(element,"Class level requires a file name.");
+
+    boolean found = false;
+    for (PreferenceInjector ei : targetClassMap.values()) {
+      if(className.equals(ei.getTargetClass())) {
+        ei.setFileName(fileName);
+        found = true;
+      }
+    }
+    if(!found)error(element,"PreferenceConfig can only be applied to classes that contain @Preference.");
+  }
+
+  private void parsePreference(Element element, Map<TypeElement, PreferenceInjector> targetClassMap,
+                               Set<TypeMirror> erasedTargetTypes) {
+    boolean hasError = false;
 
     TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
 
@@ -211,7 +278,7 @@ public final class InjectExtraProcessor extends AbstractProcessor {
     // Assemble information on the injection point.
     String name = element.getSimpleName().toString();
     String file = element.getAnnotation(Preference.class).file();
-    String key = element.getAnnotation(Preference.class).value();
+    String key = element.getAnnotation(Preference.class).key();
     String defaultValue = element.getAnnotation(Preference.class).defaultValue();
 
     if(isNullOrEmpty(key)) key = name;
@@ -219,26 +286,26 @@ public final class InjectExtraProcessor extends AbstractProcessor {
 
     TypeMirror type = element.asType();
 
-    ExtraInjector extraInjector = getOrCreateTargetClass(targetClassMap, enclosingElement);
-    extraInjector.addField(name, file, key, defaultValue, type);
+    PreferenceInjector preferenceInjector = getOrCreateTargetClass(targetClassMap, enclosingElement);
+    preferenceInjector.addField(name, file, key, defaultValue, type);
 
     // Add the type-erased version to the valid injection targets set.
     TypeMirror erasedTargetType = typeUtils.erasure(enclosingElement.asType());
     erasedTargetTypes.add(erasedTargetType);
   }
 
-  private ExtraInjector getOrCreateTargetClass(Map<TypeElement, ExtraInjector> targetClassMap,
+  private PreferenceInjector getOrCreateTargetClass(Map<TypeElement, PreferenceInjector> targetClassMap,
       TypeElement enclosingElement) {
-    ExtraInjector extraInjector = targetClassMap.get(enclosingElement);
-    if (extraInjector == null) {
+    PreferenceInjector preferenceInjector = targetClassMap.get(enclosingElement);
+    if (preferenceInjector == null) {
       String targetType = enclosingElement.getQualifiedName().toString();
       String classPackage = getPackageName(enclosingElement);
       String className = getClassName(enclosingElement, classPackage) + SUFFIX;
 
-      extraInjector = new ExtraInjector(classPackage, className, targetType);
-      targetClassMap.put(enclosingElement, extraInjector);
+      preferenceInjector = new PreferenceInjector(classPackage, className, targetType);
+      targetClassMap.put(enclosingElement, preferenceInjector);
     }
-    return extraInjector;
+    return preferenceInjector;
   }
 
   private static String getClassName(TypeElement type, String packageName) {

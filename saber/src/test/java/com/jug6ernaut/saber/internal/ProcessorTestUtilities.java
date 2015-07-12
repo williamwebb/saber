@@ -22,6 +22,6 @@
 //
 //final class ProcessorTestUtilities {
 //  static Iterable<? extends Processor> saberProcessors() {
-//    return Arrays.asList(new InjectExtraProcessor());
+//    return Arrays.asList(new InjectPreferenceProcessor());
 //  }
 //}

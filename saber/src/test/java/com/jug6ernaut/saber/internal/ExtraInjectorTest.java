@@ -19,7 +19,7 @@
 //
 //import org.junit.Test;
 //
-//import static com.jug6ernaut.saber.internal.ExtraInjector.emitHumanDescription;
+//import static com.jug6ernaut.saber.internal.PreferenceInjector.emitHumanDescription;
 //import static java.util.Arrays.asList;
 //import static org.fest.assertions.api.Assertions.assertThat;
 //

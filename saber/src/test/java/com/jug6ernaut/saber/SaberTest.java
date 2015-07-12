@@ -19,7 +19,7 @@ package com.jug6ernaut.saber;
 
 import android.app.Activity;
 import com.google.testing.compile.JavaFileObjects;
-import com.jug6ernaut.saber.internal.InjectExtraProcessor;
+import com.jug6ernaut.saber.internal.InjectPreferenceProcessor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,11 +59,10 @@ public class SaberTest {
   @Test public void annotationProcessor() {
     ASSERT.about(javaSource())
         .that(source)
-        .processedWith(new InjectExtraProcessor())
-        .compilesWithoutError()
-        .and().generatesSources(generated);
+        .processedWith(new InjectPreferenceProcessor())
+        .compilesWithoutError();
   }
 
-  private final JavaFileObject source = JavaFileObjects.forResource("com.jug6ernaut.saber.example/MainActivity.java");
-  private final JavaFileObject generated = JavaFileObjects.forResource("com.jug6ernaut.saber.example/MainActivity$$ExtraInjector.java");
+  private final JavaFileObject source = JavaFileObjects.forResource("com/jug6ernaut/saber/example/MainActivity.java");
+//  private final JavaFileObject generated = JavaFileObjects.forResource("com/jug6ernaut/saber/example/MainActivity$$ExtraInjector.java");
 }

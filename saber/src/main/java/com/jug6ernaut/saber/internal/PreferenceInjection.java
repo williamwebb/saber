@@ -20,14 +20,14 @@ package com.jug6ernaut.saber.internal;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
 
-final class ExtraInjection {
+final class PreferenceInjection {
   private final String file;
   private final String key;
   private final Object defaultValue;
   private final TypeMirror type;
   private final Set<FieldBinding> fieldBindings = new LinkedHashSet<>();
 
-  ExtraInjection(String file,String key, Object defaultValue, TypeMirror type) {
+  PreferenceInjection(String file, String key, Object defaultValue, TypeMirror type) {
     this.file = file;
     this.key = key;
     this.defaultValue = defaultValue;

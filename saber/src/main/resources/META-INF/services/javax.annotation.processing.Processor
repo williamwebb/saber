@@ -15,4 +15,4 @@
 # limitations under the License.
 #
 
-com.jug6ernaut.saber.internal.InjectExtraProcessor
+com.jug6ernaut.saber.internal.InjectPreferenceProcessor

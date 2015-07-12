@@ -25,7 +25,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.jug6ernaut.saber.internal.InjectExtraProcessor;
+import com.jug6ernaut.saber.internal.InjectPreferenceProcessor;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -106,7 +106,7 @@ public class Saber {
       return NO_OP;
     }
     try {
-      Class<?> injector = Class.forName(clsName + InjectExtraProcessor.SUFFIX);
+      Class<?> injector = Class.forName(clsName + InjectPreferenceProcessor.SUFFIX);
       inject = injector.getMethod("inject", Context.class, cls);
       if (debug) Log.d(TAG, "HIT: Class loaded injection class.");
     } catch (ClassNotFoundException e) {

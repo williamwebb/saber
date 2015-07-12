@@ -34,5 +34,9 @@ public abstract class Preference<Type> {
     public void delete() {
         preferences.edit().remove(key).apply();
     }
+
+    public String getKey() {
+        return key;
+    }
 }
 

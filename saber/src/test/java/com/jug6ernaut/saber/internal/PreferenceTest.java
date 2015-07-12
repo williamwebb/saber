@@ -40,10 +40,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", "    object = finder.getExtra(source, \"key\");", //
 //            "    if (object == null) {", //
@@ -80,10 +80,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", //
 //            "    object = finder.getExtra(source, \"key_bool\");", //
@@ -151,10 +151,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", "    object = finder.getExtra(source, \"key\");", //
 //            "    if (object == null) {", //
@@ -186,10 +186,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", "    object = finder.getExtra(source, \"key\");", //
 //            "    if (object == null) {", //
@@ -235,10 +235,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", //
 //            "    object = finder.getExtra(source, \"key\");", //
@@ -269,10 +269,10 @@
 //        ));
 //
 //        JavaFileObject expectedSource =
-//            JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//            JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //                "package test;", //
 //                "import Dart.Finder;", //
-//                "public class Test$$ExtraInjector {", //
+//                "public class Test$$PreferenceInjector {", //
 //                "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //                "    Object object;", //
 //                "    object = finder.getExtra(source, \"key\");", //
@@ -393,10 +393,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource1 =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", //
 //            "    object = finder.getExtra(source, \"key\");", //
@@ -409,12 +409,12 @@
 //        ));
 //
 //    JavaFileObject expectedSource2 =
-//        JavaFileObjects.forSourceString("test/TestOne$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/TestOne$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class TestOne$$ExtraInjector {", //
+//            "public class TestOne$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.TestOne target, Object source) {",
-//            "    test.Test$$ExtraInjector.inject(finder, target, source);", //
+//            "    test.Test$$PreferenceInjector.inject(finder, target, source);", //
 //            "    Object object;", //
 //            "    object = finder.getExtra(source, \"key\");", //
 //            "    if (object == null) {", //
@@ -456,10 +456,10 @@
 //    ));
 //
 //    JavaFileObject expectedSource1 =
-//        JavaFileObjects.forSourceString("test/Test$$ExtraInjector", Joiner.on('\n').join( //
+//        JavaFileObjects.forSourceString("test/Test$$PreferenceInjector", Joiner.on('\n').join( //
 //            "package test;", //
 //            "import Dart.Finder;", //
-//            "public class Test$$ExtraInjector {", //
+//            "public class Test$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.Test target, Object source) {",
 //            "    Object object;", //
 //            "    object = finder.getExtra(source, \"key\");", //
@@ -471,12 +471,12 @@
 //            "}" //
 //        ));
 //
-//    JavaFileObject expectedSource2 = JavaFileObjects.forSourceString("test/TestOne$$ExtraInjector",
+//    JavaFileObject expectedSource2 = JavaFileObjects.forSourceString("test/TestOne$$PreferenceInjector",
 //        Joiner.on('\n').join("package test;", //
 //            "import Dart.Finder;", //
-//            "public class TestOne$$ExtraInjector {", //
+//            "public class TestOne$$PreferenceInjector {", //
 //            "  public static void inject(Finder finder, final test.TestOne target, Object source) {",
-//            "    test.Test$$ExtraInjector.inject(finder, target, source);", //
+//            "    test.Test$$PreferenceInjector.inject(finder, target, source);", //
 //            "    Object object;", //
 //            "    object = finder.getExtra(source, \"key\");", //
 //            "    if (object == null) {", //

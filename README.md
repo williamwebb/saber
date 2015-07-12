@@ -8,23 +8,21 @@ SharedPreference "injection" library for Android which uses annotation processin
 Usage
 =====
 ```
-@Preference(file = "aFile") // file name applied to all sub @Preference
+@PreferenceConfig(file = "someFile") // optional, file used for all sub @Preference unless override
 public class MainActivity extends Activity {
 
-  @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
-  @Preference(value = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
   @Preference BooleanPreference boolPreference; // no information needed
 
   @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
     Saber.inject(this);
 
-    int value = intPref.get();
-    intPref.set(9999);
-
-    String string = stringPreference.get();
-    stringPreference.set("whatwhat");
+    boolean bool = boolPreference();
+    boolPreference(true);
   }
+  
+  @OnChange
+  public void changeListener(String key) {
+  	  }
 }
 ```
 Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
@@ -57,7 +55,7 @@ Download the latest JAR via Maven:
 <dependency>
   <groupId>com.jug6ernaut</groupId>
   <artifactId>saber</artifactId>
-  <version>0.5.0-SNAPSHOT</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 
@@ -65,7 +63,7 @@ or Gradle:
 
 
 ```groovy
-compile 'com.jug6eranut:saber:0.5.0-SNAPSHOT'
+compile 'com.jug6eranut:saber:0.5.0'
 ```
 
 
@@ -73,8 +71,8 @@ License
 -------
 
     Copyright 2015 William Webb
-    Copyright 2013 Jake Wharton
     Copyright 2014 Prateek Srivastava (@f2prateek)
+    Copyright 2013 Jake Wharton
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

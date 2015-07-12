@@ -25,17 +25,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.jug6ernaut.saber.internal.InjectExtraProcessor.isNullOrEmpty;
+import static com.jug6ernaut.saber.internal.InjectPreferenceProcessor.isNullOrEmpty;
 
-final class ExtraInjector {
-  private final Map<String, ExtraInjection> injectionMap = new LinkedHashMap<>();
+final class PreferenceInjector {
+  private final Map<String, PreferenceInjection> injectionMap = new LinkedHashMap<>();
+  private final Map<String, String> onChangeMap = new LinkedHashMap<>(); // file/method name
   private final String classPackage;
   private final String className;
   private final String targetClass;
   private String parentInjector;
   private String fileName;
 
-  ExtraInjector(String classPackage, String className, String targetClass) {
+  PreferenceInjector(String classPackage, String className, String targetClass) {
     this.classPackage = classPackage;
     this.className = className;
     this.targetClass = targetClass;
@@ -107,13 +108,13 @@ final class ExtraInjector {
     this.parentInjector = parentInjector;
   }
 
-  private ExtraInjection getOrCreateExtraBinding(String file, String key, String defaultValue, TypeMirror type) {
-    ExtraInjection extraInjection = injectionMap.get(file+key);
-    if (extraInjection == null) {
-      extraInjection = new ExtraInjection(file,key,defaultValue,type);
-      injectionMap.put(file+key, extraInjection);
+  private PreferenceInjection getOrCreateExtraBinding(String file, String key, String defaultValue, TypeMirror type) {
+    PreferenceInjection preferenceInjection = injectionMap.get(file+key);
+    if (preferenceInjection == null) {
+      preferenceInjection = new PreferenceInjection(file,key,defaultValue,type);
+      injectionMap.put(file+key, preferenceInjection);
     }
-    return extraInjection;
+    return preferenceInjection;
   }
 
   String getFqcn() {
@@ -127,6 +128,7 @@ final class ExtraInjector {
     builder.append("import com.jug6ernaut.saber.Saber.Finder;\n\n");
     builder.append("import android.content.Context;\n\n");
     builder.append("import com.jug6ernaut.saber.preferences.Preference;\n\n");
+    if (!onChangeMap.isEmpty())builder.append("import android.content.SharedPreferences;\n\n");
     builder.append("public class ").append(className).append(" {\n");
     emitInject(builder);
     builder.append("}\n");
@@ -152,14 +154,21 @@ final class ExtraInjector {
     builder.append("    Preference object;\n");
 
     // Loop over each extras injection and emit it.
-    for (ExtraInjection injection : injectionMap.values()) {
+    for (PreferenceInjection injection : injectionMap.values()) {
       emitExtraInjection(builder, injection);
+    }
+
+    for (Map.Entry<String, String> entry : onChangeMap.entrySet()) {
+      String targetFile = entry.getKey();
+      String methodName = entry.getValue();
+
+      emitOnChangeBinding(builder,methodName,targetFile);
     }
 
     builder.append("  }\n");
   }
 
-  private void emitExtraInjection(StringBuilder builder, ExtraInjection injection) {
+  private void emitExtraInjection(StringBuilder builder, PreferenceInjection injection) {
 
     String file;
     if(!isNullOrEmpty(injection.getFile())) {
@@ -196,7 +205,7 @@ final class ExtraInjector {
     }
   }
 
-  private void emitFieldBindings(StringBuilder builder, ExtraInjection injection) {
+  private void emitFieldBindings(StringBuilder builder, PreferenceInjection injection) {
     Collection<FieldBinding> fieldBindings = injection.getFieldBindings();
     if (fieldBindings.isEmpty()) {
       return;
@@ -208,6 +217,17 @@ final class ExtraInjector {
       emitCast(builder, fieldBinding.getType());
       builder.append("object;\n");
     }
+  }
+
+  private void emitOnChangeBinding(StringBuilder builder, String methodName, String targetFile) {
+    builder.append("    context.getSharedPreferences(").append("\"");
+    builder.append(targetFile).append("\"").append(",").append("Context.MODE_PRIVATE") .append(")").append("\n");
+    builder.append("    .registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {").append("\n");
+    builder.append("      @Override").append("\n");
+    builder.append("      public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {").append("\n");
+    builder.append("        target.").append(methodName).append("( key );").append("\n");
+    builder.append("      }").append("\n");
+    builder.append("    });").append("\n");
   }
 
   public String getFileName() {
@@ -222,4 +242,11 @@ final class ExtraInjector {
     return className;
   }
 
+  public String getTargetClass() {
+    return targetClass;
+  }
+
+  public Map<String, String> getOnChangeMap() {
+    return onChangeMap;
+  }
 }
