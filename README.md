@@ -22,7 +22,8 @@ public class MainActivity extends Activity {
   
   @OnChange
   public void changeListener(String key) {
-  	  }
+  	
+  }
 }
 ```
 Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
@@ -63,7 +64,7 @@ or Gradle:
 
 
 ```groovy
-compile 'com.jug6eranut:saber:0.5.0'
+compile 'com.jug6ernaut:saber:0.5.0'
 ```
 
 
