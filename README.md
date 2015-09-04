@@ -16,8 +16,8 @@ public class MainActivity extends Activity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     Saber.inject(this);
 
-    boolean bool = boolPreference();
-    boolPreference(true);
+    Boolean bool = boolPreference.get();
+    boolPreference.set(true);
   }
   
   @OnChange
