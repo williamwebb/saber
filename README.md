@@ -40,7 +40,7 @@ Configuration
 
 `@Preference` Has 3 fields, all optional
 
-`value`  Key to be used, if not provided variable name is used.
+`key`  Key to be used, if not provided variable name is used.
 
 `file` File to use, if not provided the default is used.
 
