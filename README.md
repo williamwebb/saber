@@ -16,13 +16,14 @@ public class MainActivity extends Activity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     Saber.inject(this);
 
-    boolean bool = boolPreference();
-    boolPreference(true);
+    Boolean bool = boolPreference.get();
+    boolPreference.set(true);
   }
   
   @OnChange
   public void changeListener(String key) {
-  	  }
+  	
+  }
 }
 ```
 Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
@@ -39,7 +40,7 @@ Configuration
 
 `@Preference` Has 3 fields, all optional
 
-`value`  Key to be used, if not provided variable name is used.
+`key`  Key to be used, if not provided variable name is used.
 
 `file` File to use, if not provided the default is used.
 
@@ -63,7 +64,7 @@ or Gradle:
 
 
 ```groovy
-compile 'com.jug6eranut:saber:0.5.0'
+compile 'com.jug6ernaut:saber:0.5.0'
 ```
 
 
