@@ -183,7 +183,7 @@ final class PreferenceInjector {
         .append("\"").append(file).append("\", ")
         .append("\"").append(injection.getKey()).append("\", ")
         .append("").append(new Gson().toJson(injection.getDefaultValue())).append(", ")
-        .append("").append(injection.getType()).append(".class").append("")
+        .append("").append("(Class<Preference>) new com.google.gson.reflect.TypeToken<").append(injection.getType()).append(">(){}.getRawType()").append("")
         .append(");\n");
 
     List<Binding> requiredBindings = injection.getRequiredBindings();
