@@ -25,12 +25,13 @@ import com.jug6ernaut.saber.PreferenceConfig;
 import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.BooleanPreference;
 import com.jug6ernaut.saber.preferences.IntPreference;
-import com.jug6ernaut.saber.preferences.StringPreference;
+
+import java.util.Set;
 
 @PreferenceConfig(file = "aFile") // file name applied to all sub @Preference
 public class MainActivity extends Activity {
 
-  @Preference(defaultValue = "wow") StringPreference stringPreference; // variable name is used as key
+  @Preference(defaultValue = "wow") com.jug6ernaut.saber.preferences.Preference<Set<String>> stringPreference; // variable name is used as key
   @Preference(key = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
   @Preference BooleanPreference boolPreference; // no information needed
 
@@ -41,8 +42,8 @@ public class MainActivity extends Activity {
     int value = intPref.get();
     intPref.set(9999);
 
-    String string = stringPreference.get();
-    stringPreference.set("whatwhat");
+    Set<String> string = stringPreference.get();
+//    stringPreference.set("whatwhat");
 
     Boolean bool = boolPreference.get();
     boolPreference.set(true);

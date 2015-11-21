@@ -17,6 +17,7 @@
 
 package com.jug6ernaut.saber.internal;
 
+import com.google.gson.reflect.TypeToken;
 import com.jug6ernaut.saber.OnChange;
 import com.jug6ernaut.saber.Preference;
 import com.jug6ernaut.saber.PreferenceConfig;
@@ -31,10 +32,9 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.*;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.SimpleTypeVisitor6;
 import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
@@ -52,13 +52,22 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 public final class InjectPreferenceProcessor extends AbstractProcessor {
   public static final String SUFFIX = "$$SaberInjector";
 
-  List<String> CLASSES = Arrays.asList(
+  static final List<String> CLASSES = Arrays.asList(
     BooleanPreference.class.getName(),
     FloatPreference.class.getName(),
     IntPreference.class.getName(),
     LongPreference.class.getName(),
     StringPreference.class.getName(),
     StringSetPreference.class.getName()
+  );
+
+  static final List<String> TYPES = Arrays.asList(
+          Boolean.class.getName(),
+          Float.class.getName(),
+          Integer.class.getName(),
+          Long.class.getName(),
+          String.class.getName(),
+          new TypeToken<Set<String>>(){}.getType().toString()
   );
 
   private Elements elementUtils;
@@ -182,9 +191,14 @@ public final class InjectPreferenceProcessor extends AbstractProcessor {
       hasError = true;
     }
 
+//    for (PreferenceType pt : PreferenceType.values()) {
+//      System.err.println(pt.baseType);
+//      System.err.println(pt.clazz);
+//    }
+
     // Verify its only applied to our specific classes
     String targetClassName = element.asType().toString();
-    if (!CLASSES.contains(targetClassName)) {
+    if (!CLASSES.contains(targetClassName) && !TYPES.contains(getGenericType(element.asType()).toString())) {
       error(enclosingElement, "@%s may not be applied to %s."
               , annotationClass.getSimpleName()
               , element.asType().toString());
@@ -361,5 +375,51 @@ public final class InjectPreferenceProcessor extends AbstractProcessor {
 
   private String getPackageName(TypeElement type) {
     return elementUtils.getPackageOf(type).getQualifiedName().toString();
+  }
+
+  public static TypeMirror getGenericType(final TypeMirror type)
+  {
+    final TypeMirror[] result = { null };
+
+    type.accept(new SimpleTypeVisitor6<Void, Void>()
+    {
+      @Override
+      public Void visitDeclared(DeclaredType declaredType, Void v)
+      {
+        List<? extends TypeMirror> typeArguments = declaredType.getTypeArguments();
+        if (!typeArguments.isEmpty())
+        {
+          result[0] = typeArguments.get(0);
+        }
+        return null;
+      }
+      @Override
+      public Void visitPrimitive(PrimitiveType primitiveType, Void v)
+      {
+        return null;
+      }
+      @Override
+      public Void visitArray(ArrayType arrayType, Void v)
+      {
+        return null;
+      }
+      @Override
+      public Void visitTypeVariable(TypeVariable typeVariable, Void v)
+      {
+        return null;
+      }
+      @Override
+      public Void visitError(ErrorType errorType, Void v)
+      {
+        return null;
+      }
+      @Override
+      protected Void defaultAction(TypeMirror typeMirror, Void v)
+      {
+        throw new UnsupportedOperationException();
+      }
+    }, null);
+
+    return result[0];
   }
 }
