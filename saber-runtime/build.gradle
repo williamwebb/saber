@@ -13,6 +13,9 @@ android {
 
         consumerProguardFiles 'proguard-rules.txt'
     }
+    jacoco {
+        version = '0.7.3.201502191951'
+    }
 }
 
 dependencies {

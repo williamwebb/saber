@@ -4,8 +4,6 @@ apply plugin: 'maven'
 group = GROUP
 version = VERSION_NAME
 
-//apply plugin: 'checkstyle'
-
 def logger = new com.android.build.gradle.internal.LoggerWrapper(project.logger)
 def sdkHandler = new com.android.build.gradle.internal.SdkHandler(project, logger)
 for (File file : sdkHandler.sdkLoader.repositories) {
@@ -26,12 +24,5 @@ dependencies {
     testCompile deps.compiletesting
     testCompile files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
 }
-
-//checkstyle {
-//    configFile rootProject.file('checkstyle.xml')
-//    showViolations true
-//    //Remove this when tests are less verbose, i.e. using JavaPoet
-//    sourceSets = [sourceSets.main]
-//}
 
 //apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
