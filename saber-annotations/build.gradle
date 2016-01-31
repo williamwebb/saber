@@ -22,7 +22,6 @@ configurations {
 
 dependencies {
     provided deps.android
-    compile deps.supportAnnotations
     compile deps.gson
 }
 

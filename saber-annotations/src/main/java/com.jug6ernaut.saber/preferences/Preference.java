@@ -1,7 +1,6 @@
 package com.jug6ernaut.saber.preferences;
 
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 
 import java.util.Map;
 
@@ -66,7 +65,6 @@ public abstract class Preference<Type> {
     }
   };
 
-  @Nullable
   public static Object getFrom(SharedPreferences sharedPreferences, String key) {
     Map<String, ?> data = sharedPreferences.getAll();
     if(data.containsKey(key)) {
