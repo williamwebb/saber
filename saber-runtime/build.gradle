@@ -20,12 +20,6 @@ android {
 
 dependencies {
     compile project(':saber-annotations')
-    compile deps.supportAnnotations
-    provided deps.supportv4
-
-    testCompile deps.junit
-    testCompile deps.truth
-//    testCompile deps.robolectric
 }
 
 // deploy to local repos
