@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+group = GROUP
+version = VERSION_NAME
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+
+        consumerProguardFiles 'proguard-rules.txt'
+    }
+}
+
+dependencies {
+    compile project(':saber-annotations')
+    compile deps.supportAnnotations
+    provided deps.supportv4
+
+    testCompile deps.junit
+    testCompile deps.truth
+//    testCompile deps.robolectric
+}
+
+// deploy to local repos
+task installArchives(type: Upload) {
+    description "Installs the artifacts to the local Maven repository."
+    configuration = configurations['archives']
+    repositories {
+        mavenDeployer {
+            repository url: "file://${System.properties['user.home']}/.m2/repository"
+        }
+    }
+}
+
+//apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

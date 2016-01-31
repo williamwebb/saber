@@ -28,4 +28,8 @@
       android:layout_height="wrap_content"
       android:text="@string/launch"
       android:id="@+id/button"/>
+  <TextView
+      android:id="@+id/text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
 </LinearLayout>

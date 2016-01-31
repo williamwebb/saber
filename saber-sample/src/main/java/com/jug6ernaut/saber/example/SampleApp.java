@@ -18,13 +18,14 @@
 package com.jug6ernaut.saber.example;
 
 import android.app.Application;
-import butterknife.ButterKnife;
+
 import com.jug6ernaut.saber.Saber;
 
 public class SampleApp extends Application {
+
   @Override public void onCreate() {
     super.onCreate();
-    ButterKnife.setDebug(BuildConfig.DEBUG);
     Saber.setDebug(BuildConfig.DEBUG);
+    Saber.bind(this);
   }
 }

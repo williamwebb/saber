@@ -19,31 +19,60 @@ package com.jug6ernaut.saber.example;
 
 import android.app.Activity;
 import android.os.Bundle;
-import com.jug6ernaut.saber.OnChange;
-import com.jug6ernaut.saber.Preference;
-import com.jug6ernaut.saber.PreferenceConfig;
-import com.jug6ernaut.saber.Saber;
-import com.jug6ernaut.saber.preferences.BooleanPreference;
-import com.jug6ernaut.saber.preferences.IntPreference;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.jug6ernaut.saber.Saber;
+import com.jug6ernaut.saber.preferences.Preference;
+import com.jug6ernaut.saber.preferences.StringSetPreference;
+
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
-@PreferenceConfig(file = "aFile") // file name applied to all sub @Preference
+import saber.Bind;
+import saber.OnChange;
+
 public class MainActivity extends Activity {
 
-  @Preference(defaultValue = "wow") com.jug6ernaut.saber.preferences.Preference<Set<String>> stringPreference; // variable name is used as key
-  @Preference(key = "someKey",file = "someFile") IntPreference intPref; // field level values always take precedence
-  @Preference BooleanPreference boolPreference; // no information needed
+  @Bind(key = "another", dv = "[1,2,3]") Preference<Set<String>> stringPreference; // variable name is used as key
+  @Bind(key = "someKey")                 Preference<Integer>     intPref; // field level values always take precedence
+  @Bind(key = "someKey")                 Preference<Integer>     intPref1; // field level values always take precedence
+  @Bind(key = "aKey", dv = "true")                    Preference<Boolean>     boolPreference; // no information needed
+  @Bind(key = "2Key", file = "thisIsAFile")    StringSetPreference     rawObjectObservable;
+  @Bind(key = "aKey2")                    Preference<Boolean>     boolPreference2; // no information needed
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  Button button;
+  TextView textView;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Saber.inject(this);
+    setContentView(R.layout.activity_main);
+    Saber.bind(this);
 
+    textView = (TextView) findViewById(R.id.text);
+    button = (Button) findViewById(R.id.button);
+    button.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+//        Set<String> set = stringPreference.get();
+        Set<String> set2 = new HashSet<String>();
+        set2.add(System.currentTimeMillis()+"");
+        stringPreference.set(set2);
+      }
+    });
     int value = intPref.get();
     intPref.set(9999);
 
     Set<String> string = stringPreference.get();
-//    stringPreference.set("whatwhat");
+
+    boolPreference.setOnChangeListener(new Preference.OnChangeListener<Boolean>() {
+      @Override public void onChange(Boolean t) {
+        System.err.println("onChange: " + t);
+      }
+    });
 
     Boolean bool = boolPreference.get();
     boolPreference.set(true);
@@ -51,23 +80,26 @@ public class MainActivity extends Activity {
     intPref.delete();
     stringPreference.delete();
     boolPreference.delete();
+
+    rawObjectObservable.set(Collections.singleton("wat2"));
+    rawObjectObservable.delete();
   }
 
-  @OnChange
-  void onChange(String key) {
-    System.err.println("onChange: " + key);
+  @OnChange(key = "another")
+  void onChangeAnother(Set<String> val) {
+    Toast.makeText(this,"onChangeStringSet: " + val,Toast.LENGTH_LONG).show();
+    System.err.println("onChangeStringSet: " + val);
   }
 
-  @OnChange(file = "someFile")
-  void onChange2(String key) {
-    System.err.println("onChange2: " + key);
-
+  @OnChange(key = "2Key", file = "aFileNotAPref")
+  void onChangeStringSet(Set<String> val) {
+    Toast.makeText(this,"onChangeStringSet: " + val,Toast.LENGTH_LONG).show();
+    System.err.println("onChangeStringSet: " + val);
   }
 
-  @OnChange(file = "aFile")
-  void onChange3(String key) {
-    System.err.println("onChange3: " + key);
-
-
+  @OnChange(key = "aKey")
+  void onChangeBoolean(Boolean val) {
+    Toast.makeText(this,"onChangeBoolean: " + val,Toast.LENGTH_LONG).show();
+    System.err.println("onChangeBoolean: " + val);
   }
 }

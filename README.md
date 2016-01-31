@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
   }
 }
 ```
-Saber provides wrapper classes for all shared preference applicable value types, type safe and null safe.
+Saber provides wrapper classes for all shared preference applicable value types, preferenceType safe and null safe.
 
 	IntPreference
 	LongPreference

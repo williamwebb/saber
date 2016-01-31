@@ -1,0 +1,11 @@
+-keep class saber.** { *; }
+-dontwarn saber.internal.**
+-keep class **$$SaberInjector { *; }
+
+-keepclasseswithmembernames class * {
+    @saber.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @saber.* <methods>;
+}
