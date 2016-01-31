@@ -275,7 +275,7 @@ public final class InjectPreferenceProcessor extends AbstractProcessor {
     List<? extends VariableElement> params = getMethodParams(element);
     if(params.size() != 1) error(element,"onChange can only take one parameter. " + element);
 
-    String type = params.stream().findFirst().get().asType().toString();
+    String type = params.get(0).asType().toString();
     if (!TYPES.contains(type)) error(element, type + " is not supported. Must be of types : " + TYPES);
     if(!CLASSES.contains(type)) {
       type = TRANSLATION_TABLE.get(type);
@@ -301,7 +301,7 @@ public final class InjectPreferenceProcessor extends AbstractProcessor {
     }
     if(!found) {
       PreferenceInjector ei = getOrCreateTargetClass(targetClassMap,enclosingElement);
-      ei.getOnChangeMap().put(fileName, new HashSet<>());
+      ei.getOnChangeMap().put(fileName, new HashSet<OnChangeInjection>());
       ei.getOnChangeMap().get(fileName).add(injection);
     }
   }
