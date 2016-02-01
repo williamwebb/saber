@@ -16,6 +16,11 @@ android {
     jacoco {
         version = '0.7.3.201502191951'
     }
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+        abortOnError false
+    }
 }
 
 dependencies {
