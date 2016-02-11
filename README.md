@@ -3,7 +3,7 @@ Saber [![Build Status](https://travis-ci.org/jug6ernaut/saber.svg?branch=master)
 
 Android SharedPreferences wrapper and injector. Based on Dart, which was originally based on ButterKnife.
 
-SharedPreference "injection" library for Android which uses annotation processing to generate code that does direct field assignment of your SharedPreference.
+SharedPreference "injection" library for Android which uses annotation processing to generate code that does direct field assignment of your SharedPreference..
 
 Usage
 =====
