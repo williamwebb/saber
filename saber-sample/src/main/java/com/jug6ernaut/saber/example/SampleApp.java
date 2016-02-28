@@ -26,6 +26,5 @@ public class SampleApp extends Application {
   @Override public void onCreate() {
     super.onCreate();
     Saber.setDebug(BuildConfig.DEBUG);
-    Saber.bind(this);
   }
 }

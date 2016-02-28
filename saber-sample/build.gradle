@@ -26,7 +26,13 @@ android {
     lintOptions {
         textReport true
         textOutput 'stdout'
-        abortOnError false
+
+        warningsAsErrors true
+        abortOnError true
+
+        disable 'InvalidPackage'
+        disable 'GoogleAppIndexingWarning'
+        disable 'MissingApplicationIcon'
     }
 }
 

@@ -24,14 +24,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
- * Annotation for fields which indicate that it should be looked up in the activity intent's extras
- * or fragment arguments.
- * The extra will automatically be cast to the field type. If no key is provided, the variable name
- * will be used.
- * <pre><code>
- * {@literal @}OnChange("key") StringPrference title;
- * {@literal @}OnChange String content; // "content" is the key for the extra
- * </code></pre>
+ * EXPERIMENTAL
  */
 @Retention(CLASS) @Target(METHOD) public @interface OnChange {
     String file() default "";

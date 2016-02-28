@@ -13,13 +13,15 @@ android {
 
         consumerProguardFiles 'proguard-rules.txt'
     }
-    jacoco {
-        version = '0.7.3.201502191951'
-    }
     lintOptions {
         textReport true
         textOutput 'stdout'
-        abortOnError false
+
+        warningsAsErrors true
+        abortOnError true
+
+        disable 'InvalidPackage'
+        disable 'GoogleAppIndexingWarning'
     }
 }
 
@@ -38,4 +40,4 @@ task installArchives(type: Upload) {
     }
 }
 
-//apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

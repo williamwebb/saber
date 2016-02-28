@@ -21,19 +21,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.jug6ernaut.saber.preferences.Preference;
+import saber.Bind;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import saber.Bind;
 
 public class Saber {
   static final Map<Class<?>, Method> INJECTORS = new LinkedHashMap<Class<?>, Method>();
@@ -145,20 +140,7 @@ public class Saber {
    * If any of the means to get a bundle are null, this will simply return a null.
    */
   public static class Finder {
-//    public static <P extends Preference> P getPreference(Context context, String file, String key, String defaultValue, Class<P> type) {
-//      SharedPreferences prefs;
-//      if(isNullOrEmpty(file)) prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//      else prefs = context.getSharedPreferences(file,Context.MODE_PRIVATE);
-//
-//      try {
-//        if(isNullOrEmpty(defaultValue))
-//          return type.getDeclaredConstructor(SharedPreferences.class,String.class).newInstance(prefs,key);
-//        else
-//          return type.getDeclaredConstructor(SharedPreferences.class,String.class,String.class).newInstance(prefs,key,defaultValue);
-//      } catch (Exception e) {
-//        throw new IllegalStateException("");
-//      }
-//    }
+    @SuppressWarnings("unchecked")
     public static <T> T castPreference(Preference preference, String file, String key) {
       try {
         return (T) preference;

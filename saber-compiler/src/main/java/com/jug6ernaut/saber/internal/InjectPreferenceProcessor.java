@@ -18,52 +18,27 @@
 package com.jug6ernaut.saber.internal;
 
 import com.google.gson.reflect.TypeToken;
-import com.jug6ernaut.saber.preferences.BooleanPreference;
-import com.jug6ernaut.saber.preferences.FloatPreference;
-import com.jug6ernaut.saber.preferences.IntPreference;
-import com.jug6ernaut.saber.preferences.LongPreference;
-import com.jug6ernaut.saber.preferences.StringPreference;
-import com.jug6ernaut.saber.preferences.StringSetPreference;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.jug6ernaut.saber.preferences.*;
+import saber.Bind;
+import saber.OnChange;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.ArrayType;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.ErrorType;
-import javax.lang.model.type.PrimitiveType;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.SimpleTypeVisitor6;
 import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
-
-import saber.Bind;
-import saber.OnChange;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 import static javax.lang.model.element.ElementKind.CLASS;
 import static javax.lang.model.element.ElementKind.METHOD;
@@ -259,6 +234,7 @@ public final class InjectPreferenceProcessor extends AbstractProcessor {
 
 
   private void parseOnChange(Element element, Map<TypeElement, PreferenceInjector> targetClassMap) {
+    error(element,"@OnChange is not currently supported.");
     String key = element.getAnnotation(OnChange.class).key();
     String fileName = element.getAnnotation(OnChange.class).file();
     String targetName = element.getEnclosingElement().toString();

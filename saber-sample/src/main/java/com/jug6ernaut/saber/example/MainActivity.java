@@ -22,27 +22,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jug6ernaut.saber.Saber;
 import com.jug6ernaut.saber.preferences.Preference;
 import com.jug6ernaut.saber.preferences.StringSetPreference;
+import saber.Bind;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import saber.Bind;
-import saber.OnChange;
-
 public class MainActivity extends Activity {
 
-  @Bind(key = "another", dv = "[1,2,3]") Preference<Set<String>> stringPreference; // variable name is used as key
-  @Bind(key = "someKey")                 Preference<Integer>     intPref; // field level values always take precedence
-  @Bind(key = "someKey")                 Preference<Integer>     intPref1; // field level values always take precedence
-  @Bind(key = "aKey", dv = "true")                    Preference<Boolean>     boolPreference; // no information needed
-  @Bind(key = "2Key", file = "thisIsAFile")    StringSetPreference     rawObjectObservable;
-  @Bind(key = "aKey2")                    Preference<Boolean>     boolPreference2; // no information needed
+  @Bind(key = "another", dv = "[1,2,3]")    Preference<Set<String>> stringPreference; // variable name is used as key
+  @Bind(key = "someKey")                    Preference<Integer>     intPref; // field level values always take precedence
+  @Bind(key = "someKey")                    Preference<Integer>     intPref1; // field level values always take precedence
+  @Bind(key = "aKey", dv = "true")          Preference<Boolean>     boolPreference; // no information needed
+  @Bind(key = "2Key", file = "thisIsAFile") StringSetPreference     rawObjectObservable;
+  @Bind(key = "aKey2")                      Preference<Boolean>     boolPreference2; // no information needed
 
   Button button;
   TextView textView;
@@ -85,21 +81,22 @@ public class MainActivity extends Activity {
     rawObjectObservable.delete();
   }
 
-  @OnChange(key = "another")
-  void onChangeAnother(Set<String> val) {
-    Toast.makeText(this,"onChangeStringSet: " + val,Toast.LENGTH_LONG).show();
-    System.err.println("onChangeStringSet: " + val);
-  }
-
-  @OnChange(key = "2Key", file = "aFileNotAPref")
-  void onChangeStringSet(Set<String> val) {
-    Toast.makeText(this,"onChangeStringSet: " + val,Toast.LENGTH_LONG).show();
-    System.err.println("onChangeStringSet: " + val);
-  }
-
-  @OnChange(key = "aKey")
-  void onChangeBoolean(Boolean val) {
-    Toast.makeText(this,"onChangeBoolean: " + val,Toast.LENGTH_LONG).show();
-    System.err.println("onChangeBoolean: " + val);
-  }
+//  TODO: Current unsupported until a way to unregister
+//  @OnChange(key = "another")
+//  void onChangeAnother(Set<String> val) {
+//    Toast.makeText(this,"onChangeStringSet: " + val,Toast.LENGTH_LONG).show();
+//    System.err.println("onChangeStringSet: " + val);
+//  }
+//
+//  @OnChange(key = "2Key", file = "aFileNotAPref")
+//  void onChangeStringSet(Set<String> val) {
+//    Toast.makeText(this,"onChangeStringSet: " + val,Toast.LENGTH_LONG).show();
+//    System.err.println("onChangeStringSet: " + val);
+//  }
+//
+//  @OnChange(key = "aKey")
+//  void onChangeBoolean(Boolean val) {
+//    Toast.makeText(this,"onChangeBoolean: " + val,Toast.LENGTH_LONG).show();
+//    System.err.println("onChangeBoolean: " + val);
+//  }
 }
