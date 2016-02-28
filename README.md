@@ -11,7 +11,7 @@ Usage
 @PreferenceConfig(file = "someFile") // optional, file used for all sub @Preference unless override
 public class MainActivity extends Activity {
 
-  @Preference BooleanPreference boolPreference; // no information needed
+  @Bind Preference<Boolean> boolPreference; // no information needed
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     Saber.inject(this);
@@ -20,10 +20,6 @@ public class MainActivity extends Activity {
     boolPreference.set(true);
   }
   
-  @OnChange
-  public void changeListener(String key) {
-  	
-  }
 }
 ```
 Saber provides wrapper classes for all shared preference applicable value types, preferenceType safe and null safe.
@@ -38,13 +34,13 @@ Saber provides wrapper classes for all shared preference applicable value types,
 Configuration
 -------------
 
-`@Preference` Has 3 fields, all optional
+`@Bind` Has 3 fields, all optional
 
 `key`  Key to be used, if not provided variable name is used.
 
 `file` File to use, if not provided the default is used.
 
-`defaultValue` Default value to be used, if not provided the class specific value will be used.
+`dv` Default value to be used, if not provided the class specific value will be used.
 
 Download
 --------
@@ -54,9 +50,9 @@ Download the latest JAR via Maven:
 
 ```xml
 <dependency>
-  <groupId>com.jug6ernaut</groupId>
+  <groupId>com.jug6ernaut.saber</groupId>
   <artifactId>saber</artifactId>
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
@@ -64,7 +60,7 @@ or Gradle:
 
 
 ```groovy
-compile 'com.jug6ernaut:saber:0.5.0'
+compile 'com.jug6ernaut.saber:saber:0.6.0'
 ```
 
 
