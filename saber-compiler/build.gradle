@@ -1,9 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
-group = GROUP
-version = VERSION_NAME
-
 def logger = new com.android.build.gradle.internal.LoggerWrapper(project.logger)
 def sdkHandler = new com.android.build.gradle.internal.SdkHandler(project, logger)
 for (File file : sdkHandler.sdkLoader.repositories) {

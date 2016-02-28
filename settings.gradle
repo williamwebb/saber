@@ -1,6 +1,5 @@
 include ':saber-runtime'
 include ':saber-annotations'
 include ':saber-compiler'
-include ':saber-sample'
 
 rootProject.name = 'saber-parent'

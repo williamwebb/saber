@@ -1,4 +1,6 @@
 subprojects { project ->
+    group = GROUP
+    version = VERSION_NAME
 
     repositories {
         jcenter()
@@ -20,7 +22,7 @@ ext {
     minSdkVersion = 14
     targetSdkVersion = 23
     compileSdkVersion = 23
-    buildToolsVersion = '23.0.1'
+    buildToolsVersion = '23.0.2'
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 }
@@ -28,8 +30,8 @@ ext {
 ext.deps = [
         // Android
         android: 'com.google.android:android:4.0.1.2',
-        supportv4: 'com.android.support:support-v4:23.0.1',
-        supportAnnotations: 'com.android.support:support-annotations:23.0.1',
+        supportv4: 'com.android.support:support-v4:23.2.0',
+        supportAnnotations: 'com.android.support:support-annotations:23.2.0',
 
         // Square
         javapoet: 'com.squareup:javapoet:1.4.0',
@@ -43,8 +45,3 @@ ext.deps = [
         autocommon: 'com.google.auto:auto-common:0.4',
         gson: 'com.google.code.gson:gson:2.5'
 ]
-
-apply plugin: 'maven'
-
-group = GROUP
-version = VERSION_NAME

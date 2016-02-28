@@ -1,9 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
-group = GROUP
-version = VERSION_NAME
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
