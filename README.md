@@ -1,4 +1,4 @@
-Saber [![Build Status](https://travis-ci.org/jug6ernaut/saber.svg?branch=master)](https://travis-ci.org/jug6ernaut/saber)
+Saber [![Build Status](https://travis-ci.org/williamwebb/saber.svg?branch=master)](https://travis-ci.org/williamwebb/saber)
 ============
 
 Android SharedPreferences wrapper and injector. Based on Dart, which was originally based on ButterKnife.
